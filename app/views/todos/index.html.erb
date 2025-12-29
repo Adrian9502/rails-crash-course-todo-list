@@ -2,28 +2,112 @@
 
 <div class="w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-6 animate-fade-in">
+      <p class="py-3 px-4 bg-green-50 text-green-600 font-medium rounded-xl inline-flex items-center shadow-sm border border-green-200" id="notice">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <%= notice %>
+      </p>
+    </div>
   <% end %>
 
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Todos</h1>
-    <%= link_to "New todo", new_todo_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  <div class="text-center mb-8">
+    <h1 class="font-bold text-4xl sm:text-5xl mb-2 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">My Tasks</h1>
+    <p class="text-gray-600 text-sm sm:text-base">Stay organized and productive</p>
   </div>
 
-  <div id="todos" class="min-w-full divide-y divide-gray-200 space-y-5">
+  <%= link_to new_todo_path, class: "group mb-6 flex items-center justify-center gap-2 w-full rounded-2xl px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]" do %>
+    <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    <span>Add New Task</span>
+  <% end %>
+
+  <div id="todos" class="space-y-3">
     <% if @todos.any? %>
       <% @todos.each do |todo| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render todo %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", todo, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_todo_path(todo), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", todo, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+        <div class="group bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-200 transition-all p-5 animate-fade-in">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 pt-1">
+              <% if todo.completed? %>
+                <div class="relative">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 shadow-md">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </span>
+                </div>
+              <% else %>
+                <span class="inline-block w-7 h-7 rounded-full border-2 border-gray-300 group-hover:border-blue-400 transition-colors"></span>
+              <% end %>
+            </div>
+            
+            <div class="flex-1 min-w-0">
+              <h3 class="<%= 'line-through text-gray-400' if todo.completed? %> text-lg font-semibold text-gray-900 mb-1 break-words">
+                <%= todo.title %>
+              </h3>
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span><%= time_ago_in_words(todo.created_at) %> ago</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <%= link_to todo, class: "p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              <% end %>
+              <%= link_to edit_todo_path(todo), class: "p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all" do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              <% end %>
+              <%= button_to todo, method: :delete, class: "p-2.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all", data: { turbo_confirm: "Delete this task?" } do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              <% end %>
+            </div>
           </div>
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No todos found.</p>
+      <div class="text-center py-16 bg-white/50 rounded-3xl border-2 border-dashed border-gray-300 backdrop-blur-sm">
+        <div class="mb-4">
+          <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No tasks yet</h3>
+        <p class="text-gray-500 mb-6">Start by creating your first task above</p>
+        <div class="animate-bounce text-gray-400">
+          <svg class="mx-auto h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+          </svg>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+</style>

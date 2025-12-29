@@ -1,10 +1,19 @@
-<% content_for :title, "Editing todo" %>
+<% content_for :title, "Edit Task" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing todo</h1>
+<div class="w-full">
+  <%= link_to todos_path, class: "inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 group" do %>
+    <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    <span class="font-medium">Back to tasks</span>
+  <% end %>
 
-  <%= render "form", todo: @todo %>
+  <div class="text-center mb-8">
+    <h1 class="font-bold text-3xl sm:text-4xl mb-2 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">Edit Task</h1>
+    <p class="text-gray-600">Make changes to your task</p>
+  </div>
 
-  <%= link_to "Show this todo", @todo, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to todos", todos_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="bg-white rounded-3xl shadow-lg border border-gray-200 p-8">
+    <%= render "form", todo: @todo %>
+  </div>
 </div>
