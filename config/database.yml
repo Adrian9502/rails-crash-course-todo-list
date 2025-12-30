@@ -10,6 +10,9 @@ development:
   cable:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
+  queue:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
 
 test:
   primary:
@@ -18,11 +21,17 @@ test:
   cable:
     <<: *default
     database: todo_rails_test
+  queue:
+    <<: *default
+    database: todo_rails_test
 
 production:
   primary:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
   cable:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+  queue:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
